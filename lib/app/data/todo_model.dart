@@ -7,11 +7,7 @@ class TodoModel {
   late Timestamp createDate;
   late bool complated;
 
-  TodoModel({
-    required this.content,
-    required this.complated,
-    required this.createDate,
-  });
+  TodoModel({required this.title, required this.content});
 
   TodoModel.fromDocumentSnapshot({required DocumentSnapshot documentSnapshot}) {
     documentId = documentSnapshot.id;
