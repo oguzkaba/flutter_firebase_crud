@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_crud/app/data/services.dart';
 import 'package:flutter_firebase_crud/app/data/todo_controller.dart';
 import 'package:flutter_firebase_crud/app/modules/widgets/card_widget.dart';
+import 'package:flutter_firebase_crud/global/constants.dart';
 import 'package:flutter_firebase_crud/global/internet_controller.dart';
 import 'package:get/get.dart';
 
@@ -15,14 +15,14 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Home'),
+        title: Obx(() => Text(netContoller.isOnline ? "Todo List" : "Offline")),
         actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              _buildAddEditEmployeeView(text: 'ADD', addEditFlag: 1, docId: '');
-            },
-          )
+           IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () => netContoller.isOnline
+                    ? _buildAddEditEmployeeView(text: 'ADD', docId: "")
+                    : null,
+              )
         ],
       ),
       body: Obx(
@@ -31,7 +31,8 @@ class HomeView extends GetView<HomeController> {
           itemBuilder: (BuildContext context, int index) {
             //print(todoController.todos[index].content);
             final _todoModel = todoController.todos[index];
-            return TodoCardWidget(todoModel: _todoModel);
+            return TodoCardWidget(
+                todoModel: _todoModel, homeController: controller);
           },
         ),
       ),
@@ -39,7 +40,7 @@ class HomeView extends GetView<HomeController> {
   }
 
 //TODO: Update Save todos
-  _buildAddEditEmployeeView({String? text, int? addEditFlag, String? docId}) {
+  _buildAddEditEmployeeView({String? text, String? docId}) {
     Get.bottomSheet(
       Container(
         decoration: BoxDecoration(
@@ -61,10 +62,13 @@ class HomeView extends GetView<HomeController> {
                 children: [
                   Text(
                     '$text Todo',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: myBlueColor),
                   ),
                   SizedBox(
-                    height: 8,
+                    height: 18,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -104,14 +108,20 @@ class HomeView extends GetView<HomeController> {
                     child: ElevatedButton(
                       child: Text(
                         text!,
-                        style: TextStyle(color: Colors.black, fontSize: 16),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: myBlueColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       onPressed: () {
                         controller.saveUpdateTodo(
                             controller.titleController.text,
                             controller.contentController.text,
                             docId!,
-                            addEditFlag!);
+                            text);
                       },
                     ),
                   ),

@@ -1,27 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_crud/app/data/services.dart';
+import 'package:flutter_firebase_crud/global/constants.dart';
 import 'package:get/get.dart';
 
-class CustomDialogWidget {
-  static void showDialogWidget(
-      {required BuildContext? context,
-      required String title,
-      required String message,
-      required String docId
-      //required Color backgroundColor,
-      }) {
-    Get.defaultDialog(
-      title: title,
-      titleStyle: TextStyle(fontSize: 20),
-      middleText: message,
-      textCancel: "Cancel",
-      textConfirm: "Confirm",
-      confirmTextColor: Colors.black,
-      onCancel: () => Get.back(),
-      onConfirm: () {
-        FirestoreServices.deleteTodo(docId);
-        Get.back();
-      },
+class CustomDialogWidget extends StatelessWidget {
+  final BuildContext? context;
+  final String title;
+  final String message;
+  final String docId;
+
+  const CustomDialogWidget({
+    Key? key,
+    this.context,
+    required this.title,
+    required this.message,
+    required this.docId,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: <Widget>[
+        OutlinedButton(
+          style: ElevatedButton.styleFrom(
+            side: BorderSide(width: 1, color: myRedColor),
+          ),
+          child: Text('Cancel', style: TextStyle(color: myRedColor)),
+          onPressed: () => Get.back(),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: myRedColor),
+          child: Text('Delete', style: TextStyle(color: myWhiteColor)),
+          onPressed: () {
+            FirestoreServices.deleteTodo(docId);
+            Get.back();
+          },
+        ),
+      ],
     );
   }
+
+  // static void showDialogWidget(
+  //     {required BuildContext? context,
+  //     required String title,
+  //     required String message,
+  //     required String docId
+  //     //required Color backgroundColor,
+  //     }) {
+  //   Get.defaultDialog(
+  //     title: title,
+  //     contentPadding: EdgeInsets.all(20),
+  //     buttonColor: myRedColor,
+  //     titleStyle: TextStyle(fontSize: 20),
+  //     middleText: message,
+  //     middleTextStyle: TextStyle(fontSize: 20),
+  //     textCancel: "Cancel",
+  //     textConfirm: "Delete",
+  //     cancelTextColor: myRedColor,
+  //     confirmTextColor: Colors.white,
+  //     onCancel: () => Get.back(),
+  //     onConfirm: () {
+  //       FirestoreServices.deleteTodo(docId);
+  //       Get.back();
+  //     },
+  //   );
+  // }
 }

@@ -73,13 +73,14 @@ netErrorSnackBar() {
       "WARNING..!",
       'You are not connected to the internet.\n Make sure Wi-Fi is or Mobile Data on, Airplane Mode is Off and try again.',
       icon: Icon(Icons.wifi_off_rounded, color: Colors.white),
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
       backgroundColor: Colors.redAccent,
       borderRadius: 20,
       margin: EdgeInsets.fromLTRB(30, 0, 30, 100),
       colorText: Colors.white,
       isDismissible: true,
-      dismissDirection: DismissDirection.down,
+      duration: Duration(seconds: 5),
+      dismissDirection: DismissDirection.up,
       forwardAnimationCurve: Curves.fastOutSlowIn,
     );
     d = 0;

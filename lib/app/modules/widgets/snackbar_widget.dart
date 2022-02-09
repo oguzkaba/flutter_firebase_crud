@@ -13,11 +13,11 @@ class CustomSnackbarWidget {
         backgroundColor: backgroundColor,
         titleText: Text(
           title,
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16,color: Colors.white.withOpacity(0.8)),
         ),
         messageText: Text(
           message,
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(color: Colors.white.withOpacity(0.5)),
         ),
         colorText: Colors.white,
         borderRadius: 8,

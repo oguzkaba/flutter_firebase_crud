@@ -20,24 +20,22 @@ class HomeController extends GetxController {
     if (value.isEmpty) {
       return "Title can not be empty";
     }
-    return null;
   }
 
   String? validateContent(String value) {
     if (value.isEmpty) {
       return "Content can not be empty";
     }
-    return null;
   }
 
   void saveUpdateTodo(
-      String title, String content, String docId, int addEditFlag) {
+      String title, String content, String docId, String operation) {
     final isValid = formKey.currentState!.validate();
-    if (!isValid) {
+    if (!isValid || title.isEmpty || content.isEmpty) {
       return;
     }
     formKey.currentState!.save();
-    if (addEditFlag == 1) {
+    if (operation == "ADD") {
       BottomSheetDialog.showDialog();
       FirestoreServices.addTodo(TodoModel(title: title, content: content))
           .then((value) {
@@ -46,7 +44,8 @@ class HomeController extends GetxController {
         Get.back();
         CustomSnackbarWidget.showSnackBar(
             context: Get.context,
-            title: "Todo Added",
+            
+            title: "Added",
             message: "Todo added successfully",
             backgroundColor: Colors.green);
       }).catchError((error) {
@@ -57,7 +56,7 @@ class HomeController extends GetxController {
             message: "Something went wrong",
             backgroundColor: Colors.redAccent);
       });
-    } else if (addEditFlag == 2) {
+    } else if (operation == "UPDATE") {
       //TODO: update
       BottomSheetDialog.showDialog();
       FirestoreServices.updateTodo(false, docId).then(() {
@@ -66,8 +65,8 @@ class HomeController extends GetxController {
         Get.back();
         CustomSnackbarWidget.showSnackBar(
             context: Get.context,
-            title: "Employee Updated",
-            message: "Employee updated successfully",
+            title: "Todo Updated",
+            message: "Todo updated successfully",
             backgroundColor: Colors.green);
       }).catchError((error) {
         BottomSheetDialog.cancelDialog();

@@ -13,7 +13,6 @@ class BottomSheetDialog {
         onWillPop: () => Future.value(false),
       ),
       barrierDismissible: false,
-      barrierColor: Color(0xff141A31).withOpacity(.3),
       useSafeArea: true,
     );
   }
