@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_crud/app/data/services.dart';
 import 'package:flutter_firebase_crud/app/data/todo_model.dart';
-import 'package:flutter_firebase_crud/app/modules/widgets/bottom_sheet.dart';
-import 'package:flutter_firebase_crud/app/modules/widgets/dialog_widget.dart';
+import 'package:flutter_firebase_crud/app/modules/widgets/bottom_sheet_widget.dart';
+import 'package:flutter_firebase_crud/app/modules/widgets/snackbar_widget.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {

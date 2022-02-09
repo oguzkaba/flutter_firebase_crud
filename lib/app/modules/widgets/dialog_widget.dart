@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_crud/app/data/services.dart';
 import 'package:get/get.dart';
 
-class CustomSnackbarWidget {
-  static void showSnackBar({
-    required BuildContext? context,
-    required String title,
-    required String message,
-    required Color backgroundColor,
-  }) {
-    Get.snackbar(title, message,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: backgroundColor,
-        titleText: Text(
-          title,
-          style: TextStyle(fontSize: 16),
-        ),
-        messageText: Text(
-          message,
-          style: TextStyle(fontSize: 16),
-        ),
-        colorText: Colors.white,
-        borderRadius: 8,
-        margin: EdgeInsets.all(16));
+class CustomDialogWidget {
+  static void showDialogWidget(
+      {required BuildContext? context,
+      required String title,
+      required String message,
+      required String docId
+      //required Color backgroundColor,
+      }) {
+    Get.defaultDialog(
+      title: title,
+      titleStyle: TextStyle(fontSize: 20),
+      middleText: message,
+      textCancel: "Cancel",
+      textConfirm: "Confirm",
+      confirmTextColor: Colors.black,
+      onCancel: () => Get.back(),
+      onConfirm: () {
+        FirestoreServices.deleteTodo(docId);
+        Get.back();
+      },
+    );
   }
 }

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_crud/app/data/services.dart';
 import 'package:flutter_firebase_crud/app/data/todo_controller.dart';
-
+import 'package:flutter_firebase_crud/app/modules/widgets/card_widget.dart';
+import 'package:flutter_firebase_crud/global/internet_controller.dart';
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   final TodoController todoController = Get.put(TodoController());
-
+  final NetController netContoller = Get.put(NetController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Home'),
         actions: [
           IconButton(
@@ -27,58 +29,14 @@ class HomeView extends GetView<HomeController> {
         () => ListView.builder(
           itemCount: todoController.todos.length,
           itemBuilder: (BuildContext context, int index) {
-            print(todoController.todos[index].content);
+            //print(todoController.todos[index].content);
             final _todoModel = todoController.todos[index];
-            return Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: 4,
-                vertical: 4,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        _todoModel.content,
-                        style: TextStyle(
-                          fontSize: Get.textTheme.headline6!.fontSize,
-                          decoration: _todoModel.complated
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                        ),
-                      ),
-                    ),
-                    Checkbox(
-                      value: _todoModel.complated,
-                      onChanged: (status) {
-                        FirestoreServices.updateTodoComplated(
-                          status!,
-                          _todoModel.documentId,
-                        );
-                      },
-                    ),
-                    IconButton(
-                      onPressed: () => showDeleteDialog(_todoModel.documentId!),
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return TodoCardWidget(todoModel: _todoModel);
           },
         ),
       ),
     );
   }
-
 
 //TODO: Update Save todos
   _buildAddEditEmployeeView({String? text, int? addEditFlag, String? docId}) {
@@ -163,22 +121,6 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ),
-    );
-  }
-
-//TODO: Update delete dialog
-  showDeleteDialog(String docId) {
-    Get.defaultDialog(
-      title: "Delete Todo",
-      titleStyle: TextStyle(fontSize: 20),
-      middleText: 'Are you sure to delete todo ?',
-      textCancel: "Cancel",
-      textConfirm: "Confirm",
-      confirmTextColor: Colors.black,
-      onCancel: () {},
-      onConfirm: () {
-        FirestoreServices.deleteTodo(docId);
-      },
     );
   }
 }

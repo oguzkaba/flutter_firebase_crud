@@ -7,12 +7,7 @@ import 'package:get/get.dart';
 class FirestoreServices {
 //Create Operation
   static addTodo(TodoModel todomodel) async {
-    await Get.find<TodoController>()
-        .firebaseFirestore
-        //.collection('users')
-        //.doc(auth.currentUser!.uid)
-        .collection('todos')
-        .add({
+    await firebaseFirestore.collection('todos').add({
       'title': todomodel.title,
       'content': todomodel.content,
       'createDate': Timestamp.now(),
@@ -23,8 +18,6 @@ class FirestoreServices {
 //Read Operation
   static Stream<List<TodoModel>> getTodos() {
     return firebaseFirestore
-        //.collection('users')
-        //.doc(auth.currentUser!.uid)
         .collection('todos')
         .snapshots()
         .map((QuerySnapshot query) {
@@ -40,12 +33,7 @@ class FirestoreServices {
 
 //Update Operation
   static updateTodo(bool isComplate, documentId) {
-    firebaseFirestore
-        // .collection('users')
-        // .doc(auth.currentUser!.uid)
-        .collection('todos')
-        .doc(documentId)
-        .update(
+    firebaseFirestore.collection('todos').doc(documentId).update(
       {
         'complated': isComplate,
       },
@@ -53,12 +41,7 @@ class FirestoreServices {
   }
 
   static updateTodoComplated(bool isComplate, documentId) {
-    firebaseFirestore
-        // .collection('users')
-        // .doc(auth.currentUser!.uid)
-        .collection('todos')
-        .doc(documentId)
-        .update(
+    firebaseFirestore.collection('todos').doc(documentId).update(
       {
         'complated': isComplate,
       },
@@ -67,11 +50,6 @@ class FirestoreServices {
 
 //Delete Operation
   static deleteTodo(String documentId) {
-    firebaseFirestore
-        // .collection('users')
-        // .doc(auth.currentUser!.uid)
-        .collection('todos')
-        .doc(documentId)
-        .delete();
+    firebaseFirestore.collection('todos').doc(documentId).delete();
   }
 }
