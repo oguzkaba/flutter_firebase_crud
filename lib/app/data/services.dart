@@ -32,10 +32,13 @@ class FirestoreServices {
   }
 
 //Update Operation
-  static updateTodo(bool isComplate, documentId) {
-    firebaseFirestore.collection('todos').doc(documentId).update(
+  static updateTodo(TodoModel todomodel) {
+    firebaseFirestore.collection('todos').doc(todomodel.documentId).update(
       {
-        'complated': isComplate,
+        'title': todomodel.title,
+        'content': todomodel.content,
+        'createDate': Timestamp.now(),
+        'complated': false,
       },
     );
   }
