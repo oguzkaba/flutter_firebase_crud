@@ -22,53 +22,67 @@ class TodoCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: todoModel.complated ? Colors.grey.withOpacity(0.2) : Colors.white,
+      color: todoModel.complated ? myGreyColor : myWhiteColor,
       shadowColor: todoModel.complated ? Colors.transparent : null,
-      child: ListTile(
-        leading: Checkbox(
-          value: todoModel.complated,
-          onChanged: (status) {
-            FirestoreServices.updateTodoComplated(
-                status!, todoModel.documentId);
-          },
-        ),
-        title: Text(todoModel.title,
-            style: TextStyle(overflow: TextOverflow.ellipsis)),
-        subtitle: Text(todoModel.content,
-            style: TextStyle(overflow: TextOverflow.ellipsis)),
-        isThreeLine: true,
-        trailing: Visibility(
-          visible: netController.isOnline,
-          child: IconButton(
-              onPressed: () async => showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CustomDialogWidget(
-                        context: Get.context,
-                        title: "Delete Todo",
-                        message: "Are you sure to delete todo ?",
-                        docId: todoModel.documentId!,
-                      );
-                    },
-                  ),
-              icon: const Icon(Icons.delete, color: myRedColor)),
-        ),
-        onTap: () {
-          homeController.titleController.text = todoModel.title;
-          homeController.contentController.text = todoModel.content;
-          print(homeController.titleController.text +
-              " " +
-              homeController.contentController.text);
-          CustomBottomSheetWidget.showBSheet(
-              context: context,
-              text: 'UPDATE',
-              todoModel: todoModel,
-              controller: homeController);
-          // TODO: implement onTap
-          // BuildAddEditEmployeeView(
-          //     text: 'UPDATE', docId: todoModel.documentId);
-        },
-      ),
+      child: Obx(() => ListTile(
+            leading: Visibility(
+              visible: netController.isOnline,
+              child: Checkbox(
+                side: BorderSide(color: myBlueColor, width: 2),
+                activeColor: myBlueColor,
+                value: todoModel.complated,
+                onChanged: (status) {
+                  FirestoreServices.updateTodoComplated(
+                      status!, todoModel.documentId);
+                },
+              ),
+            ),
+            title: Text(todoModel.title,
+                style: TextStyle(
+                    decoration: todoModel.complated
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                    overflow: TextOverflow.ellipsis)),
+            subtitle: Text(todoModel.content,
+                style: TextStyle(
+                    decoration: todoModel.complated
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                    overflow: TextOverflow.ellipsis)),
+            isThreeLine: true,
+            trailing: Visibility(
+              visible: netController.isOnline,
+              child: IconButton(
+                  onPressed: () async => showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialogWidget(
+                            context: Get.context,
+                            title: "Delete Todo",
+                            message:
+                                "Are you sure to delete todo ?\n(${todoModel.title})",
+                            docId: todoModel.documentId!,
+                          );
+                        },
+                      ),
+                  icon: const Icon(Icons.delete, color: myRedColor)),
+            ),
+            onTap: netController.isOnline
+                ? () {
+                    homeController.titleController.text = todoModel.title;
+                    homeController.contentController.text = todoModel.content;
+                    homeController.holdTitle.value = todoModel.title;
+                    homeController.holdContent.value = todoModel.content;
+                    homeController.changedDetect.value = "";
+
+                    CustomBottomSheetWidget.showBSheet(
+                        context: context,
+                        text: 'UPDATE',
+                        docId: todoModel.documentId,
+                        controller: homeController);
+                  }
+                : null,
+          )),
     );
   }
 }

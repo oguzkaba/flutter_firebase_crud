@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_firebase_crud/global/constants.dart';
 import 'package:get/get.dart';
 
 class NetController extends GetxController {
@@ -72,19 +73,17 @@ netErrorSnackBar() {
     Get.snackbar(
       "WARNING..!",
       'You are not connected to the internet.\n Make sure Wi-Fi is or Mobile Data on, Airplane Mode is Off and try again.',
-      icon: Icon(Icons.wifi_off_rounded, color: Colors.white),
+      icon: Icon(Icons.wifi_off_rounded, color: myWhiteColor),
       snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.redAccent,
+      backgroundColor: myRedColor,
       borderRadius: 20,
       margin: EdgeInsets.fromLTRB(30, 0, 30, 100),
-      colorText: Colors.white,
+      colorText: myWhiteColor,
       isDismissible: true,
       duration: Duration(seconds: 5),
       dismissDirection: DismissDirection.up,
       forwardAnimationCurve: Curves.fastOutSlowIn,
     );
     d = 0;
-  } else {}
-
-  print('dson= $d');
+  }
 }

@@ -40,30 +40,4 @@ class CustomDialogWidget extends StatelessWidget {
       ],
     );
   }
-
-  // static void showDialogWidget(
-  //     {required BuildContext? context,
-  //     required String title,
-  //     required String message,
-  //     required String docId
-  //     //required Color backgroundColor,
-  //     }) {
-  //   Get.defaultDialog(
-  //     title: title,
-  //     contentPadding: EdgeInsets.all(20),
-  //     buttonColor: myRedColor,
-  //     titleStyle: TextStyle(fontSize: 20),
-  //     middleText: message,
-  //     middleTextStyle: TextStyle(fontSize: 20),
-  //     textCancel: "Cancel",
-  //     textConfirm: "Delete",
-  //     cancelTextColor: myRedColor,
-  //     confirmTextColor: Colors.white,
-  //     onCancel: () => Get.back(),
-  //     onConfirm: () {
-  //       FirestoreServices.deleteTodo(docId);
-  //       Get.back();
-  //     },
-  //   );
-  // }
 }

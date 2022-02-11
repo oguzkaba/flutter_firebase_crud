@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_firebase_crud/app/data/todo_controller.dart';
 import 'package:flutter_firebase_crud/app/data/todo_model.dart';
 import 'package:flutter_firebase_crud/global/constants.dart';
-import 'package:get/get.dart';
 
 class FirestoreServices {
 //Create Operation
@@ -32,8 +30,11 @@ class FirestoreServices {
   }
 
 //Update Operation
-  static updateTodo(TodoModel todomodel) {
-    firebaseFirestore.collection('todos').doc(todomodel.documentId).update(
+  static updateTodo(TodoModel todomodel) async {
+    await firebaseFirestore
+        .collection('todos')
+        .doc(todomodel.documentId)
+        .update(
       {
         'title': todomodel.title,
         'content': todomodel.content,
@@ -43,8 +44,8 @@ class FirestoreServices {
     );
   }
 
-  static updateTodoComplated(bool isComplate, documentId) {
-    firebaseFirestore.collection('todos').doc(documentId).update(
+  static updateTodoComplated(bool isComplate, documentId) async {
+    await firebaseFirestore.collection('todos').doc(documentId).update(
       {
         'complated': isComplate,
       },
