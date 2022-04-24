@@ -11,9 +11,21 @@ dependencies:
   #State Management and utils
   get: 4.6.1
 
+  #Utils
+  intro_slider: ^3.0.4
+  image_picker: ^0.8.5
+  flutter_slidable: ^1.2.0
+  persistent_bottom_nav_bar: ^4.0.2
+  fl_chart: ^0.50.1
+  get_storage: ^2.0.3
+  package_info_plus: ^1.4.2
+
+
+
   #FireBase
   firebase_core: 1.12.0
   cloud_firestore: 3.1.7
+  firebase_storage: ^10.2.13
 
   #Network
   connectivity_plus: ^2.2.0
@@ -28,4 +40,7 @@ dev_dependencies:
 
 flutter: 
   uses-material-design: true
+
+  assets:
+    - assets/images/intro/
 

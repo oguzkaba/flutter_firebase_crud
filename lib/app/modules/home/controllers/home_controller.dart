@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_crud/app/data/services.dart';
-import 'package:flutter_firebase_crud/app/data/todo_model.dart';
-import 'package:flutter_firebase_crud/app/modules/widgets/loading_widget.dart';
-import 'package:flutter_firebase_crud/app/modules/widgets/snackbar_widget.dart';
-import 'package:flutter_firebase_crud/global/constants.dart';
+import 'package:flutter_firebase_crud/app/data/remote/services/services.dart';
+import 'package:flutter_firebase_crud/app/data/remote/models/todo_model.dart';
+import 'package:flutter_firebase_crud/app/global/constants/constants.dart';
+import 'package:flutter_firebase_crud/app/widgets/loading_widget.dart';
+import 'package:flutter_firebase_crud/app/widgets/snackbar_widget.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
+  static HomeController instance=Get.put(HomeController());
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController titleController, contentController;
   final changedDetect = "".obs;
@@ -24,65 +25,48 @@ class HomeController extends GetxController {
     if (value.isEmpty) {
       return emptyTitleErrorText;
     }
+    return null;
   }
 
   String? validateContent(String value) {
     if (value.isEmpty) {
       return emptyContentErrorText;
     }
+    return null;
   }
 
-  void saveUpdateTodo(
-      String title, String content, String docId, String operation) {
+  void updateTodo(
+      String title, String content, String docId, String category) {
     final isValid = formKey.currentState!.validate();
     if (!isValid || title.isEmpty || content.isEmpty) {
       return;
     }
     formKey.currentState!.save();
-    //ADD Operation
-    if (operation == "ADD") {
-      LoadingWidget.showDialog();
-      FirestoreServices.addTodo(TodoModel(title: title, content: content))
-          .then((value) async {
-        LoadingWidget.cancelDialog();
-        clearEditingControllers();
-        FocusScope.of(Get.context!).requestFocus(FocusNode());
-        Get.back();
-
-        CustomSnackbarWidget.showSnackBar(
-            context: Get.context,
-            title: "Added",
-            message: "Todo added successfully",
-            backgroundColor: myGreenColor);
-      }).catchError((error) {
-        LoadingWidget.cancelDialog();
-        CustomSnackbarWidget.showSnackBar(
-            context: Get.context,
-            title: "Error",
-            message: wrongText,
-            backgroundColor: myRedColor);
-      });
-    }
     //UPDATE Operation
-    else if (operation == "UPDATE" &&
-        (title != holdTitle.value || content != holdContent.value)) {
+    if (title != holdTitle.value || content != holdContent.value) {
       LoadingWidget.showDialog();
-      FirestoreServices.updateTodo(
-              TodoModel(title: title, content: content, documentId: docId))
+      FirestoreServices.updateTodo(TodoModel(
+              title: title,
+              content: content,
+              documentId: docId,
+              category: category))
           .then((value) {
         LoadingWidget.cancelDialog();
         clearEditingControllers();
         FocusScope.of(Get.context!).requestFocus(FocusNode());
         Get.back();
         CustomSnackbarWidget.showSnackBar(
-            context: Get.context,
-            title: "Todo Updated",
-            message: "Todo updated successfully",
-            backgroundColor: myGreenColor);
+          icon: Icon(Icons.check),
+          context: Get.context!,
+          title: "Todo Updated",
+          message: "Todo updated successfully",
+          backgroundColor: myGreenColor,
+        );
       }).catchError((error) {
         LoadingWidget.cancelDialog();
         CustomSnackbarWidget.showSnackBar(
-            context: Get.context,
+            icon: Icon(Icons.error),
+            context: Get.context!,
             title: "Error",
             message: wrongText,
             backgroundColor: myRedColor);
@@ -90,12 +74,6 @@ class HomeController extends GetxController {
     } else {
       changedDetect.value = noChangeWarningText;
     }
-  }
-
-  @override
-  void onClose() {
-    titleController.dispose();
-    contentController.dispose();
   }
 
   void clearEditingControllers() {

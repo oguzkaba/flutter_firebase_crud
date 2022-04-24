@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_crud/global/constants.dart';
+import 'package:flutter_firebase_crud/app/global/constants/constants.dart';
 class Themes {
   static ThemeData lightTheme() {
     return ThemeData.light().copyWith(
