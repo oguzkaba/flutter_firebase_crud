@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AddTodoController extends GetxController {
-  static AddTodoController instance=Get.put(AddTodoController());
+  static AddTodoController instance = Get.put(AddTodoController());
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController titleController, contentController;
   final isSelected = false.obs;
@@ -72,7 +72,7 @@ class AddTodoController extends GetxController {
     return null;
   }
 
-  void saveTodo(String title, String content, String? category)async {
+  void saveTodo(String title, String content, String? category) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid || title.isEmpty || content.isEmpty) {
       return;
@@ -81,7 +81,9 @@ class AddTodoController extends GetxController {
     //ADD Operation
 
     LoadingWidget.showDialog();
-    await uploadImageToFirebase(Get.context!);
+    if (imageFileList!.isNotEmpty) {
+      await uploadImageToFirebase(Get.context!);
+    }
     FirestoreServices.addTodo(TodoModel(
             title: title,
             content: content,
@@ -114,6 +116,6 @@ class AddTodoController extends GetxController {
     imageFileList?.clear();
     titleController.clear();
     contentController.clear();
-    category.value="Other";
+    category.value = "Other";
   }
 }
